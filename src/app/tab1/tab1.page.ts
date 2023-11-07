@@ -4,6 +4,7 @@ import { CartService } from '../services/cart.service';
 import { Router } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { AlertController } from '@ionic/angular';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-tab1',
@@ -13,6 +14,7 @@ import { AlertController } from '@ionic/angular';
 export class Tab1Page {
 
   public products: Product[] = [];
+
 
   public productsFounds: Product[] = [];
   public filter = [
@@ -41,10 +43,18 @@ export class Tab1Page {
     }
   ];
 
-  constructor(private cartService: CartService, private router: Router, private ProductService: ProductService, private alertController: AlertController) {
-    this.productsFounds = this.ProductService.getProducts();
-
-  }
+  constructor(
+    private cartService: CartService,
+     private router: Router, 
+     private ProductService: 
+     ProductService, 
+     private alertController: AlertController,
+     private userService: UserService
+     ) 
+    
+    {
+      this.productsFounds = this.ProductService.getProducts();
+    }
 
   public getColor(type: string): string {
     const itemFound = this.colors.find((element) => {
@@ -91,7 +101,6 @@ export class Tab1Page {
           text: 'Eliminar',
           handler: () => {
             this.ProductService.removeProduct(pos);
-            // Aquí puedes agregar la lógica para eliminar el elemento
           }
         }
       ]
@@ -100,7 +109,7 @@ export class Tab1Page {
   }
 
   public openUpdateProductPage(pos: number) {
-    this.getpos(pos);// Almacena el producto seleccionado.
+    this.getpos(pos);
     this.router.navigate(['/update-product']);
   }
 
@@ -117,6 +126,11 @@ export class Tab1Page {
   public actualizarProduct(i: number, product: Product) {
     this.ProductService.updateProduct(i, product);
     this.productsFounds = this.ProductService.getProducts();
+  }
+
+  logout() {
+    this.userService.logout();
+    this.router.navigate(['/login']);
   }
 
 
